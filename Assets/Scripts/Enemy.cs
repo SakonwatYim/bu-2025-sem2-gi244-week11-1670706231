@@ -14,15 +14,19 @@ public class Enemy : MonoBehaviour
         player = GameObject.Find("Player");
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        // ถ้าติดสถานะ Stun อยู่ ให้ข้ามการทำงาน
         if (isStunned) return;
-        Vector3 dir = player.transform.position - transform.position;
-        dir.Normalize();
-        rb.AddForce (dir * speed );
+
+        // เช็คผู้เล่น
+        if (player != null)
+        {
+            Vector3 dir = player.transform.position - transform.position;
+            dir.Normalize();
+            rb.AddForce(dir * speed);
+        }
     }
-    
 
     public void Stun(float duration)
     {
@@ -32,7 +36,15 @@ public class Enemy : MonoBehaviour
     private IEnumerator StunCoroutine(float duration)
     {
         isStunned = true;
+
+        // ความเร็วในการเคลื่อนที่และการหมุนเป็น 0 ทันที
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        // รอ
         yield return new WaitForSeconds(duration);
+
+        // ยกเลิก
         isStunned = false;
     }
 }
