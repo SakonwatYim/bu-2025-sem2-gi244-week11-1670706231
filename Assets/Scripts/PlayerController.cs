@@ -6,17 +6,17 @@ public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
     public Transform focalPoint;
-
-    public bool hasPowerUp;
+    public bool hasPowerUp; // Default = false
+    public GameObject powerUpIndicator;
 
     private Rigidbody rb;
+    private Coroutine boostCoroutine;
+    private GameObject tempEffectIndicator;
+
 
     private InputAction moveAction;
     private InputAction smashAction;
     private InputAction breakAction;
-
-    private Coroutine powerUpRoutine;
-    
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -35,29 +35,13 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(move.y * speed * focalPoint.forward);
         if (breakAction.IsPressed())
         {
-            rb.linearVelocity = Vector3.zero;
-
+            rb.linearVelocity = Vector3.zero; // new Vector3(0, 0, 0)
         }
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("PowerUp"))
+        if (tempEffectIndicator != null)
         {
-            hasPowerUp = true;
-            Destroy(other.gameObject);
-            if (powerUpRoutine != null)
-            {
-                StopCoroutine(powerUpRoutine);
-            }
-            powerUpRoutine = StartCoroutine(PowerUpCooldown());
+            tempEffectIndicator.transform.position = transform.position;
         }
-    }
-
-    IEnumerator PowerUpCooldown()
-    {
-        yield return new WaitForSeconds(10f);
-        hasPowerUp = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -71,8 +55,32 @@ public class PlayerController : MonoBehaviour
                 //v.Normalize();
                 var dir = enemyRb.transform.position - transform.position;
                 dir.Normalize();
-                enemyRb.AddForce(dir * 5, ForceMode.Impulse);
+                enemyRb.AddForce(dir * 10, ForceMode.Impulse);
             }
         }
+    }
+
+    public void Boost(float duration)
+    {
+        if (boostCoroutine != null)
+        {
+            StopCoroutine(boostCoroutine);
+        }
+        boostCoroutine = StartCoroutine(BoostRoutine(duration));
+    }
+
+    IEnumerator BoostRoutine(float duration)
+    {
+        if (tempEffectIndicator != null)
+        {
+            Destroy(tempEffectIndicator);
+        }
+        tempEffectIndicator = Instantiate(powerUpIndicator, transform.position, Quaternion.identity);
+        Debug.Log("Boost Activated");
+        hasPowerUp = true;
+        yield return new WaitForSeconds(duration);
+        Destroy(tempEffectIndicator);
+        Debug.Log("Boost Ended");
+        hasPowerUp = false;
     }
 }

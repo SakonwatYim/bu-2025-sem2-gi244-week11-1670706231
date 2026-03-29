@@ -27,11 +27,11 @@ public class SpawnManager : MonoBehaviour
         while (currentWave < waves.Length)
         {
             Debug.Log("Starting Wave: " + currentWave);
-            
-            // Select random spawn points for this wave
+
+            // เลือกจุดเกิดแบบสุ่ม
             SelectWaveSpawnPoints(currentWave);
-            
-            // Spawn powerups at wave start
+
+            // power ups ขึ้นตอนเริ่ม
             for (int i = 0; i < waves[currentWave].numberOfPowerUp; i++)
             {
                 RandomPowerUp();

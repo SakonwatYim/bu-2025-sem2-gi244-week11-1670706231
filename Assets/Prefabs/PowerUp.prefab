@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6337670293970668911}
   - component: {fileID: 3612317383942988205}
   - component: {fileID: 6017536333349288664}
+  - component: {fileID: 3666504686395516607}
   m_Layer: 0
   m_Name: PowerUp
   m_TagString: PowerUp
@@ -135,3 +136,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3666504686395516607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3709808119504899638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99c789025d6ce0b498d625cfc1f6bfbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoostPowerUp
+  boostDuration: 5
